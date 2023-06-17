@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            background-color: #f2f2f2;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+
+        .signup {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .form-group input::placeholder,
+        .form-group select::placeholder,
+        .form-group textarea::placeholder {
+            color: #999;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+        }
+
+        select option[disabled]:first-of-type {
+            color: #999;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #C1D0B5;
+        }
+
+        @media screen and (max-width: 768px) {
+            .login {
+                max-width: 100%;
+            }
+        }
+
+        .register-box {
+            text-align: center;
+        }
+
+        .register-box span,
+        .register-box a {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .register-box a {
+            margin-left: 10px;
+        }
+
+        select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .checkbox-group {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .checkbox-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .checkbox-group .column {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .checkbox-group .column label {
+            width: 48%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Signup Page</h1>
+    <div class="signup">
+        <form action="/signup" method="post">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter Name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label for="dob">DOB</label>
+                <input type="date" id="dob" name="dob" placeholder="Enter DOB" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" name="address" placeholder="Enter address" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="text" name="phone_number"  placeholder="Enter phone number" required>
+          </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select id="category" name="category" required>
+                    <option value="" selected disabled hidden>Select a category</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Co-ordinator">Co-ordinator</option>
+                    <option value="Volunteer">Volunteer</option>
+                </select>
+            </div>
+            <div class="form-group checkbox-group">
+                <label>Programs:</label>
+                <div class="column">
+                    <label><input type="checkbox" name="programs" value="blood donar">Blood Donar Program</label>
+                    <label><input type="checkbox" name="programs" value="gender equality">Gender Equality Program</label>
+                </div>
+                <div class="column">
+                    <label><input type="checkbox" name="programs" value="education">Bright Spark Education Program</label>
+                    <label><input type="checkbox" name="programs" value="hare krishna">Hare Krishna Program</label>
+                </div>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("category").addEventListener("change", function () {
+            var checkboxGroup = document.querySelector(".checkbox-group");
+            checkboxGroup.style.display = (this.value === "Volunteer") ? "block" : "none";
+        });
+    </script>
+</body>
+
+</html>

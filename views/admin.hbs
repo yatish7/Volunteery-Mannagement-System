@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: #f2f2f2;
+            margin-right: 20px;
+        }
+
+        .profile-box {
+            width: 400px;
+        }
+
+        .details-box {
+            width: 1000px;
+            height:250px;
+        }
+
+        .announcement-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: #f2f2f2;
+            width: 370px;
+            margin-top: 10px;
+            margin-left: 20px;
+            height: 300px; /* Adjust the height as needed */
+            overflow: auto; /* Enable scrolling if content exceeds the height */
+        }
+
+        .announcement-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .announcement-form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .announcement-form label {
+            margin-bottom: 5px;
+        }
+
+        .announcement-form input[type="text"],
+        .announcement-form textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .announcement-form button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            align-self: center;
+        }
+        .verification{
+            background-color: #333;
+            color: #fff;
+            margin-bottom: 200px;
+            margin-top: 20px;
+            margin-left: 20px;
+            margin-right: 100px;
+            width: 370px;
+            height: 300px; /* Adjust the height as needed */
+            overflow: auto; /* Enable scrolling if content exceeds the height */
+        }
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            font-size: 16px;
+            text-align: center;
+            margin-top: 10px;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <ul>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <div class="box profile-box">
+            <div class="profile-container">
+                <div class="profile-photo">
+                    <img src="profile.jpeg" alt="Profile Photo">
+                </div>
+                <div class="profile-info">
+                    <h2>{{userName}}</h2>
+                    <p>{{category}}</p>
+                </div>
+            </div>
+        </div>
+   <div class="box details-box">
+    <h3>Additional Details</h3>
+    <p><strong>Name:       </strong> {{user.name}}</p>
+    <p><strong>Email:</strong> {{user.email}}</p>
+    <p><strong>Phone Number:</strong> {{user.phone_number}}</p>
+    <p><strong>Date of Birth:</strong> {{user.dob}}</p>
+    <p><strong>Address:</strong> {{user.address}}</p>
+</div>
+
+    <!-- Add more details as needed -->
+</div>
+
+    </div>
+    <div class="announcement-box">
+        <h3>ADD ANNOUNCEMENT</h3>
+        <form class="announcement-form" action="/submit-announcement" method="POST">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter the title" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" placeholder="Enter the description" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="verification">
+        <h1>verification</h1>
+    </div>
+</body>
+</html>
