@@ -37,7 +37,7 @@
 
         .details-box {
             width: 1000px;
-            height:250px;
+            height: 250px;
         }
 
         .announcement-box {
@@ -52,8 +52,8 @@
             width: 370px;
             margin-top: 10px;
             margin-left: 20px;
-            height: 300px; /* Adjust the height as needed */
-            overflow: auto; /* Enable scrolling if content exceeds the height */
+            height: 300px; 
+            overflow: auto; 
         }
 
         .announcement-box h3 {
@@ -89,16 +89,28 @@
             align-self: center;
         }
         .verification{
-            background-color: #333;
-            color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: #f2f2f2;
             margin-bottom: 200px;
             margin-top: 20px;
-            margin-left: 20px;
-            margin-right: 100px;
-            width: 370px;
-            height: 300px; /* Adjust the height as needed */
-            overflow: auto; /* Enable scrolling if content exceeds the height */
+            margin-left: 450px;
+            border-radius: 5px;
+            width: 955px;  
+            height: 340px; 
+            margin-top: -340px;
+            overflow: auto; 
         }
+        .verification-heading {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-left: 450px;
+            width: 955px;
+            text-align: center;
+        }
+
         .navbar {
             background-color: #333;
             color: #fff;
@@ -151,7 +163,18 @@
             text-align: center;
             margin-top: 10px;
         }
-       
+        .post {
+          display: flex;
+          align-items: center;
+        }
+        
+        .post-content {
+          flex-grow: 1;
+        }
+        
+        .verify-button {
+          margin-left: auto;
+        }
     </style>
 </head>
 <body>
@@ -160,11 +183,12 @@
             <li><a href="/logout">Logout</a></li>
         </ul>
     </div>
+    <h2 class="verification-heading">Verification Pending Posts</h2>
     <div class="container">
         <div class="box profile-box">
             <div class="profile-container">
                 <div class="profile-photo">
-                    <img src="profile.jpeg" alt="Profile Photo">
+                    <a href="https://ibb.co/NZN06R9"><img src="https://i.ibb.co/FgYQbp5/profile.jpg" alt="profile" border="0"></a>
                 </div>
                 <div class="profile-info">
                     <h2>{{userName}}</h2>
@@ -172,18 +196,14 @@
                 </div>
             </div>
         </div>
-   <div class="box details-box">
-    <h3>Additional Details</h3>
-    <p><strong>Name:       </strong> {{user.name}}</p>
-    <p><strong>Email:</strong> {{user.email}}</p>
-    <p><strong>Phone Number:</strong> {{user.phone_number}}</p>
-    <p><strong>Date of Birth:</strong> {{user.dob}}</p>
-    <p><strong>Address:</strong> {{user.address}}</p>
-</div>
-
-    <!-- Add more details as needed -->
-</div>
-
+        <div class="box details-box">
+            <h3>Additional Details</h3>
+            <p><strong>Name:</strong> {{user.name}}</p>
+            <p><strong>Email:</strong> {{user.email}}</p>
+            <p><strong>Phone Number:</strong> {{user.phone_number}}</p>
+            <p><strong>Date of Birth:</strong> {{user.dob}}</p>
+            <p><strong>Address:</strong> {{user.address}}</p>
+        </div>
     </div>
     <div class="announcement-box">
         <h3>ADD ANNOUNCEMENT</h3>
@@ -197,8 +217,18 @@
             <button type="submit">Submit</button>
         </form>
     </div>
-    <div class="verification">
-        <h1>verification</h1>
+   <div class="verification">
+  {{#each posts}}
+  <div class="post">
+    <div class="post-content">
+      <p>Volunteer name: {{this.volunteer}}</p> 
+      <h3>{{this.title}}</h3>
+      <p>{{this.description}}</p>
+    </div>
+    <button class="verify-button" data-postid="{{this._id}}">Verify</button>
+  </div>
+  {{/each}}
+
     </div>
 </body>
 </html>
