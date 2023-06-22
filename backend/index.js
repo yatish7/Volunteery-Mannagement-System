@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const hbs = require("hbs");
-const { Collection1, Collection2, Collection3 } = require("./mongodb");
+const { Collection1, Collection2, Collection3, Collection4 } = require("./mongodb");
 
 const app = express();
 const viewPath = path.join(__dirname, "../views");
@@ -43,7 +43,7 @@ app.post("/signup", async (req, res) => {
     category: req.body.category,
     programs: req.body.programs || [],
   };
-  await Collection1.insertMany(data);
+  await Collection1.insertMany([data]);
 
   res.redirect("/");
 });
@@ -51,14 +51,15 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const verify = await Collection1.findOne({ email: req.body.email });
-    if (verify.password === req.body.password) {
+    if (verify && verify.password === req.body.password) {
       req.session.name = verify.name;
       req.session.category = verify.category;
       res.redirect("/index");
     } else {
       res.render("login", { errorMessage: "Wrong Password" });
     }
-  } catch {
+  } catch (error) {
+    console.log(error);
     res.render("login", { errorMessage: "Invalid Credentials" });
   }
 });
@@ -67,13 +68,19 @@ app.post("/index", async (req, res) => {
   const postData = {
     title: req.body.title,
     description: req.body.description,
+    volunteer: req.session.name, // Add the name of the volunteer as the "volunteer" field
   };
+  console.log(volunteer)
 
-  await Collection2.insertMany([postData]);
-  console.log(postData);
-
-  res.redirect("/index");
+  try {
+    await Collection2.insertMany([postData]);
+    res.redirect("/index");
+  } catch (error) {
+    console.log(error);
+    res.send("Error submitting announcement");
+  }
 });
+
 
 app.get("/profile", async (req, res) => {
   const category = req.session.category;
@@ -87,7 +94,7 @@ app.get("/profile", async (req, res) => {
   } else if (category === "Co-ordinator") {
     profileView = "coordinator";
   } else {
-    return res.send("Invalid category"); // Display a generic error message
+    return res.send("Invalid category");
   }
 
   try {
@@ -95,51 +102,25 @@ app.get("/profile", async (req, res) => {
 
     if (user) {
       const posts = await Collection2.find().sort({ _id: -1 });
-      console.log("Retrieved data:", posts);
-
-      const { phone_number, DOB, address } = user; // Destructure the properties from user object
-
+      const programs = user.programs;
+      const { phone_number, dob, address } = user;
       res.render(profileView, {
         user: user,
         userName: user.name,
         category,
-        programs: user.programs,
+        programs,
         posts,
         name: user.name,
-        DOB,
+        dob,
         address,
         phone_number,
       });
-
-      console.log("User data:", user);
-
     } else {
       return res.send("User not found");
     }
   } catch (error) {
     console.log(error);
     return res.send("Error retrieving user information");
-  }
-});
-
-
-
-app.post("/submit-announcement", async (req, res) => {
-  const { title, description } = req.body;
-
-  try {
-    const announcement = new Collection3({
-      title,
-      description,
-    });
-
-    await announcement.save();
-    const announcements = await Collection3.find().sort({ _id: -1 });
-
-    res.redirect("/index");
-  } catch (error) {
-    console.log(error);
-    res.send("Error submitting announcement");
   }
 });
 
@@ -150,6 +131,27 @@ app.get("/index", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.send("Error retrieving announcements");
+  }
+});
+
+app.post("/submit-activity", async (req, res) => {
+  const { program, startDate, endDate, hours, description } = req.body;
+
+  try {
+    const activityUpdate = new Collection4({
+      program,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      hours: Number(hours),
+      description,
+    });
+
+    await activityUpdate.save();
+
+    res.redirect("/profile");
+  } catch (error) {
+    console.log(error);
+    res.send("Error submitting activity update");
   }
 });
 

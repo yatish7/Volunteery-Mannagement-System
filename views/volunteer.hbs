@@ -33,13 +33,28 @@
 
         .profile-box {
             width: 400px;
+            height: 320px;
         }
 
         .details-box {
             width: 1000px;
-            height: 290px;
+            height: 320px;
         }
-
+        .announcement-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            background-color: #f2f2f2;
+            width: 370px;
+            margin-top: 10px;
+            margin-left: 20px;
+            height: 300px; 
+            overflow: auto; 
+        }
         .navbar {
             background-color: #333;
             color: #fff;
@@ -141,7 +156,7 @@
         <div class="box profile-box">
             <div class="profile-container">
                 <div class="profile-photo">
-                    <img src="profile.jpeg" alt="Profile Photo">
+                     <a href="https://ibb.co/NZN06R9"><img src="https://i.ibb.co/FgYQbp5/profile.jpg" alt="profile" border="0"></a>
                 </div>
                 <div class="profile-info">
                     <h2>{{userName}}</h2>
@@ -162,21 +177,63 @@
         </div>
     </div>
 
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form id="upload-work-form">
-                <!-- Your form fields go here -->
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title">
+   <div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Activity Update</h2>
+        <form id="upload-work-form">
+            <div>
+                <label for="program">Program:</label>
+                <select id="program" name="program">
+                    {{#each programs}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <br><br>
 
+            <div>
+                <label for="start-date">Start Date:</label>
+                <input type="date" id="start-date" name="start-date">
+                <br><br>
+            </div>
+
+            <div>
+                <label for="end-date">End Date:</label>
+                <input type="date" id="end-date" name="end-date">
+                <br><br>
+            </div>
+
+            <div>
+                <label for="hours">No of Hours:</label>
+                <input type="number" id="hours" name="hours">
+                <br><br>
+            </div>
+
+            <div>
                 <label for="description">Description:</label>
                 <textarea id="description" name="description"></textarea>
+                <br><br>
+            </div>
 
-                <input type="submit" value="Submit">
-            </form>
-        </div>
+            <div>
+                <input type="submit" value="Upload">
+            </div>
+        </form>
     </div>
+</div>
+
+
+<div class="announcement-box">
+<h3>Programs Enrolled:</h3>
+<ul>
+  {{#each programs}}
+    <li><h4>{{this}}</h4></li>
+  {{/each}}
+</ul>
+
+</div>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

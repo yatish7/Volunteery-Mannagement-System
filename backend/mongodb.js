@@ -42,7 +42,6 @@ const signUpSchema = new mongoose.Schema({
   }],
 });
 
-// Collections
 const Collection1 = mongoose.model("Collection1", signUpSchema);
 
 const formSchema = new mongoose.Schema({
@@ -71,4 +70,29 @@ const announcementSchema = new mongoose.Schema({
 
 const Collection3 = mongoose.model("Collection3", announcementSchema);
 
-module.exports = { Collection1, Collection2, Collection3 };
+const activityUpdateSchema = new mongoose.Schema({
+  program: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+  hours: {
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+});
+
+const Collection4 = mongoose.model("Collection4", activityUpdateSchema);
+
+module.exports = { Collection1, Collection2, Collection3, Collection4 };

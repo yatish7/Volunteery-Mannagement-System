@@ -89,14 +89,33 @@ app.get("/profile", async (req, res) => {
   } else if (category === "Co-ordinator") {
     profileView = "coordinator";
   } else {
-    return res.send("Invalid category"); // Display a generic error message
+    return res.send("Invalid category");
   }
 
   try {
     const user = await Collection1.findOne({ name: name });
 
     if (user) {
-      res.render(profileView, { userName: user.name, category, programs: user.programs});
+      const posts = await Collection2.find().sort({ _id: -1 });
+      
+      // Fetch the programs the volunteer is enrolled in
+      const programs = user.programs;
+
+      console.log(programs); // Check if the programs are correctly fetched
+
+      const { phone_number, dob, address } = user;
+
+      res.render(profileView, {
+        user: user,
+        userName: user.name,
+        category,
+        programs,
+        posts,
+        name: user.name,
+        dob,
+        address,
+        phone_number,
+      });
     } else {
       return res.send("User not found");
     }
@@ -106,26 +125,6 @@ app.get("/profile", async (req, res) => {
   }
 });
 
-app.post("/submit-announcement", async (req, res) => {
-  const { title, description } = req.body;
-
-  try {
-    const announcement = new Collection3({
-      title,
-      description,
-    });
-
-    await announcement.save();
-
-    // Retrieve all announcements including the new one
-    const announcements = await Collection3.find();
-
-    res.redirect("/index"); // Redirect to the index route
-  } catch (error) {
-    console.log(error);
-    res.send("Error submitting announcement");
-  }
-});
 app.get("/index", async (req, res) => {
   try {
     const announcements = await Collection3.find();

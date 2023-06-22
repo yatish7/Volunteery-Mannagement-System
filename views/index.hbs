@@ -2,35 +2,12 @@
 <html>
 <head>
   <title>Landing Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to right,#DFE8CC.67%, #DAE2B6 33.33%);
-    }
-
-    .navbar {
-      background-color: #333;
-      color: #fff;
-      padding: 20px;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    .navbar ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar li {
-      display: inline;
-      margin-right: 10px;
-    }
-
-    .navbar a {
-      color: #fff;
-      text-decoration: none;
+      background:#DAE2B6 ;
     }
 
     .container {
@@ -56,25 +33,53 @@
       text-align: center;
     }
 
-    .announcement-box,
-    .form-box {
-      flex: 0 0 calc(33.33% - 20px);
+    .announcement-section {
+      flex: 0 0 calc(50% - 20px);
       background-color: #f5f5f5;
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 10px;
       margin-right: 40px;
+      height: 400px;
     }
 
-    .announcement-heading{
+    .form-section {
+      flex: 0 0 calc(50% - 20px);
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 10px;
+    }
+
+      .post-section {
+    flex: 0 0 calc(54.5% - 80px); 
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 10px;
+    margin-top:20px;
+    margin-left: 720px;
+    height: 400px;
+    width: 400px;
+  }
+
+
+    .post-heading {
       text-align: left;
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
-      margin-left:50px;
     }
+
+    .form-box {
+      background-color: #f5f5f5;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 10px;
+    }
+
     .form-title {
-      text-align: left;
+      text-align: center;
       font-size: 24px;
       font-weight: bold;
       margin-bottom: 20px;
@@ -94,6 +99,7 @@
       margin-bottom: 10px;
       box-sizing: border-box;
     }
+
     button[type="submit"] {
       background-color: #333;
       color: #fff;
@@ -102,27 +108,41 @@
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.2s ease-in-out;
-      margin-left: 200px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <ul>
-      <li><a href="/profile">Profile</a></li>
-      <li><a href="/logout">Logout</a></li> 
-    </ul>
-  </div>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+       <a href="https://imgbb.com/"><img src="https://i.ibb.co/pLSDkB7/Logo-1-36.webp" alt="Logo-1-36" border="0" style="align="left""></a>
+      </a>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/profile">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
   <div class="container">
     <div class="box">
-      <div class="box-text">number of volunteers</div>
+      <div class="box-text">Number of Volunteers</div>
     </div>
     <div class="box">
       <div class="box-text">Team</div>
     </div>
     <div class="box">
-      <div class="box-text">Hours spent</div>
+      <div class="box-text">Hours Spent</div>
     </div>
     <div class="box">
       <div class="box-text">Lives Impacted</div>
@@ -134,9 +154,11 @@
       <div class="box-text">Recruitments</div>
     </div>
   </div>
+
   <div class="container">
     <div class="announcement-section">
       <h2 class="announcement-heading">Announcements</h2>
+      <br>
       <div class="announcement-box">
         {{#if announcements.length}}
           {{#each announcements}}
@@ -155,17 +177,39 @@
       <div class="form-box">
         <h2 class="form-title">Create a Post</h2>
         <form method="post" action="/index">
-          <label for="title">Title:</label>
-          <input type="text" id="title" name="title" class="form-input" placeholder="Enter title">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" id="title" name="title" class="form-control" placeholder="Enter title">
+          </div>
 
-          <label for="description">Description:</label>
-          <textarea id="description" name="description" class="form-textarea" placeholder="Enter description"></textarea>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <textarea id="description" name="description" class="form-control" placeholder="Enter description"></textarea>
+          </div>
 
-          <button type="submit">Post</button>
+          <button type="submit" class="btn btn-primary">Post</button>
         </form>
+      </div>
+    </div>
+
+    <div class="post-section">
+      <h2 class="post-heading">Posts</h2>
+      <div class="post-box">
+        {{#if posts.length}}
+          {{#each posts}}
+            <div class="post">
+              <h3>{{title}}</h3>
+              <p>{{description}}</p>
+            </div>
+          {{/each}}
+        {{else}}
+          <p>No posts available.</p>
+        {{/if}}
       </div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
 </body>
 </html>
