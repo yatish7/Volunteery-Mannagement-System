@@ -217,18 +217,21 @@
             <button type="submit">Submit</button>
         </form>
     </div>
-   <div class="verification">
+ <div class="verification">
   {{#each posts}}
   <div class="post">
     <div class="post-content">
-      <p>Volunteer name: {{this.volunteer}}</p> 
+      <p>Volunteer name: {{this.volunteerName}}</p> 
       <h3>{{this.title}}</h3>
       <p>{{this.description}}</p>
     </div>
-    <button class="verify-button" data-postid="{{this._id}}">Verify</button>
+    <form action="/verify" method="POST">
+      <input type="hidden" name="postId" value="{{this._id}}">
+      <button class="verify-button" type="submit">Verify</button>
+    </form>
   </div>
   {{/each}}
+</div>
 
-    </div>
 </body>
 </html>

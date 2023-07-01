@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:27017/loginDB")
+mongoose
+  .connect("mongodb://localhost:27017/vmsDB")
   .then(() => {
     console.log("Connected successfully to database");
   })
@@ -44,7 +45,7 @@ const signUpSchema = new mongoose.Schema({
 
 const Collection1 = mongoose.model("Collection1", signUpSchema);
 
-const formSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -53,9 +54,18 @@ const formSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  volunteer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Collection1",
+    required: true,
+  },
+  volunteerName: {
+    type: String,
+    required: true,
+  },
 });
+const Collection2=mongoose.model("Collection2",postSchema)
 
-const Collection2 = mongoose.model("Collection2", formSchema);
 
 const announcementSchema = new mongoose.Schema({
   title: {
@@ -88,6 +98,15 @@ const activityUpdateSchema = new mongoose.Schema({
     required: true,
   },
   description: {
+    type: String,
+    required: true,
+  },
+  volunteer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Collection1",
+    required: true,
+  },
+  volunteerName: {
     type: String,
     required: true,
   },
