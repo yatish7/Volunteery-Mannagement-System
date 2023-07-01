@@ -3,7 +3,6 @@ const session = require("express-session");
 const path = require("path");
 const hbs = require("hbs");
 const { Collection1, Collection2, Collection3, Collection4 } = require("./mongodb");
-
 const app = express();
 const viewPath = path.join(__dirname, "../views");
 app.set("views", viewPath);
@@ -18,6 +17,10 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+const Handlebars = require("hbs");
+const handlebarsHelpers = require("handlebars-helpers")();
+Handlebars.registerHelper(handlebarsHelpers);
 
 app.get("/", (req, res) => {
   res.render("login");
@@ -43,15 +46,23 @@ app.post("/signup", async (req, res) => {
     category: req.body.category,
     programs: req.body.programs || [],
   };
-  await Collection1.insertMany([data]);
 
-  res.redirect("/");
+  try {
+    const result = await Collection1.insertMany([data]);
+    const volunteerId = result[0]._id; // Get the volunteerId from the inserted document
+    req.session.volunteerId = volunteerId; // Set the volunteerId in the session
+    res.redirect("/");
+  } catch (error) {
+    console.log(error);
+    res.send("Error signing up");
+  }
 });
 
 app.post("/login", async (req, res) => {
   try {
     const verify = await Collection1.findOne({ email: req.body.email });
     if (verify && verify.password === req.body.password) {
+      req.session.userId = verify._id; // Set the userId in the session
       req.session.name = verify.name;
       req.session.category = verify.category;
       res.redirect("/index");
@@ -64,24 +75,58 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/index", async (req, res) => {
-  const postData = {
-    title: req.body.title,
-    description: req.body.description,
-    volunteer: req.session.name, // Add the name of the volunteer as the "volunteer" field
-  };
-  console.log(volunteer)
+
+app.post("/verify", async (req, res) => {
+  const postId = req.body.postId;
 
   try {
-    await Collection2.insertMany([postData]);
-    res.redirect("/index");
+    await Collection2.findByIdAndUpdate(postId, { verified: true });
+    res.redirect("/admin");
   } catch (error) {
     console.log(error);
-    res.send("Error submitting announcement");
+    res.send("Error verifying post");
   }
 });
 
 
+app.post("/index", async (req, res) => {
+  try {
+    const volunteerId = req.session.userId; // Assuming you have a userId stored in the session
+    const volunteerName = req.session.name; // Assuming you have a name stored in the session
+
+    if (!volunteerId || !volunteerName) {
+      throw new Error("Volunteer information is missing");
+    }
+
+    const postData = {
+      title: req.body.title,
+      description: req.body.description,
+      volunteer: volunteerId,
+      volunteerName: volunteerName,
+    };
+
+    await Collection2.create(postData);
+    res.redirect("/index");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error submitting post");
+  }
+});
+app.post("/submit-announcement", async (req, res) => {
+  try {
+    const announcementData = {
+      title: req.body.title,
+      description: req.body.description,
+    };
+
+    await Collection3.create(announcementData);
+
+    res.redirect("/index");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error submitting announcement");
+  }
+});
 app.get("/profile", async (req, res) => {
   const category = req.session.category;
   const name = req.session.name;
@@ -101,15 +146,24 @@ app.get("/profile", async (req, res) => {
     const user = await Collection1.findOne({ name: name });
 
     if (user) {
-      const posts = await Collection2.find().sort({ _id: -1 });
       const programs = user.programs;
       const { phone_number, dob, address } = user;
+
+      const posts = await Collection2.find()
+        .sort({ _id: -1 })
+        .populate("volunteer", "name");
+
+      const announcements = await Collection3.find().sort({ _id: -1 });
+      const activities = await Collection4.find().sort({ _id: -1 });
+
       res.render(profileView, {
         user: user,
         userName: user.name,
         category,
         programs,
         posts,
+        announcements,
+        activities,
         name: user.name,
         dob,
         address,
@@ -126,35 +180,44 @@ app.get("/profile", async (req, res) => {
 
 app.get("/index", async (req, res) => {
   try {
-    const announcements = await Collection3.find();
-    res.render("index", { announcements });
+    const announcements = await Collection3.find().sort({ _id: -1 });
+    const posts = await Collection2.find()
+      .sort({ _id: -1 })
+      .populate("volunteer", "name");
+    res.render("index", { announcements, posts });
   } catch (error) {
     console.log(error);
     res.send("Error retrieving announcements");
   }
 });
-
-app.post("/submit-activity", async (req, res) => {
-  const { program, startDate, endDate, hours, description } = req.body;
-
+app.post("/activity-update", async (req, res) => {
+  const volunteerId = req.session.userId; // Assuming you have a userId stored in the session
+  const volunteerName = req.session.name;
+  if (!volunteerId || !volunteerName) {
+    throw new Error("Volunteer information is missing");
+  }
   try {
-    const activityUpdate = new Collection4({
-      program,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-      hours: Number(hours),
-      description,
-    });
+    const activityUpdateData = {
+      program: req.body.program,
+      startDate: req.body["start-date"],
+      endDate: req.body["end-date"],
+      hours: req.body.hours,
+      description: req.body.description,
+      volunteer: volunteerId,
+      volunteerName: volunteerName,
+    };
 
-    await activityUpdate.save();
+    await Collection4.create(activityUpdateData);
 
     res.redirect("/profile");
   } catch (error) {
     console.log(error);
-    res.send("Error submitting activity update");
+    res.status(500).send("Error submitting activity update");
   }
 });
 
+app.use(express.static(path.join(__dirname, "../public")));
+
 app.listen(3000, () => {
-  console.log("Server is running on http://localhost:3000");
+  console.log("Server is up on port 3000");
 });
