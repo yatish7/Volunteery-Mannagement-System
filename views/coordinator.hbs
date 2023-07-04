@@ -7,138 +7,156 @@
     <title>Profile</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 20px;
-        }
+    margin: 0;
+    padding: 0;
+}
 
-        .box {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            background-color: #f2f2f2;
-            margin-right: 20px;
-        }
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+}
 
-        .profile-box {
-            width: 400px;
-        }
+.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #f2f2f2;
+    margin-right: 20px;
+}
 
-        .details-box {
-            width: 1000px;
-        }
+.profile-box {
+    width: 400px;
+}
 
-        .announcement-box {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: flex-start;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            background-color: #f2f2f2;
-            width: 370px;
-            margin-top: 10px;
-            margin-left: 20px;
-        }
+.details-box {
+    width: 1000px;
+    margin-bottom: 30px;
+}
 
-        .announcement-box h3 {
-            margin-bottom: 10px;
-        }
+.announcement-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #f2f2f2;
+    width: 370px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
 
-        .announcement-form {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-        }
+.announcement-box h3 {
+    margin-bottom: 10px;
+}
 
-        .announcement-form label {
-            margin-bottom: 5px;
-        }
+.announcement-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
 
-        .announcement-form input[type="text"],
-        .announcement-form textarea {
-            width: 100%;
-            padding: 5px;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
+.announcement-form label {
+    margin-bottom: 5px;
+}
 
-        .announcement-form button {
-            padding: 10px 20px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-            align-self: center;
-        }
-        
-        .navbar {
-            background-color: #333;
-            color: #fff;
-            padding: 10px;
-            display: flex;
-            justify-content: flex-end;
-        }
+.announcement-form input[type="text"],
+.announcement-form textarea {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
 
-        .navbar ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
+.announcement-form button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    align-self: center;
+}
 
-        .navbar li {
-            display: inline;
-            margin-right: 10px;
-        }
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
 
-        .navbar a {
-            color: #fff;
-            text-decoration: none;
-        }
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
 
-        .profile-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-top: 20px;
-        }
+.navbar li {
+    display: inline;
+    margin-right: 10px;
+}
 
-        .profile-photo {
-            width: 150px;
-            height: 150px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+}
 
-        .profile-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px;
+}
 
-        .profile-info {
-            font-size: 16px;
-            text-align: center;
-            margin-top: 10px;
-        }
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.verification {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #f2f2f2;
+    margin-bottom: 200px;
+    margin-top: 20px;
+    margin-left: 440px;
+    border-radius: 5px;
+    width: 950px;
+    height: 340px;
+    margin-top: -310px;
+    overflow: auto;
+}
+
     </style>
+    <!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
     <div class="navbar">
@@ -150,7 +168,7 @@
         <div class="box profile-box">
             <div class="profile-container">
                 <div class="profile-photo">
-                    <img src="https://www.google.com/imgres?imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fpreviews%2F005%2F544%2F718%2Foriginal%2Fprofile-icon-design-free-vector.jpg&tbnid=T4-waeMdrxSy7M&vet=12ahUKEwiGt7blir7_AhWkN7cAHfJUBgAQMygQegUIARCJAg..i&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-vector%2Fprofile-icon&docid=RBpRIqik_jZCqM&w=1920&h=1920&q=profile%20images&client=safari&ved=2ahUKEwiGt7blir7_AhWkN7cAHfJUBgAQMygQegUIARCJAg" alt="Profile Photo">
+                    <a href="https://ibb.co/NZN06R9"><img src="https://i.ibb.co/FgYQbp5/profile.jpg" alt="profile" border="0"></a>
                 </div>
                 <div class="profile-info">
                      <div class="profile-info">
@@ -183,5 +201,10 @@
             <button type="submit">Submit</button>
         </form>
     </div>
+    <div class="verification">
+</div>
+<!-- Include your custom JavaScript file -->
+<script src="../backend/script.js"></script>
+
 </body>
 </html>

@@ -63,6 +63,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 const Collection2=mongoose.model("Collection2",postSchema)
 
