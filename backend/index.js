@@ -22,6 +22,11 @@ const Handlebars = require("hbs");
 const handlebarsHelpers = require("handlebars-helpers")();
 Handlebars.registerHelper(handlebarsHelpers);
 
+// Assuming you have a list of verification posts and verified posts stored in variables
+var verificationPosts = [];
+var verifiedPosts = [];
+var posts = [];
+
 app.get("/", (req, res) => {
   res.render("login");
 });
@@ -34,6 +39,7 @@ app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
+
 
 app.post("/signup", async (req, res) => {
   const data = {
@@ -75,18 +81,35 @@ app.post("/login", async (req, res) => {
   }
 });
 
-
-app.post("/verify", async (req, res) => {
-  const postId = req.body.postId;
-
+app.post('/verify/:id', async (req, res) => {
   try {
+    const postId = req.params.id;
+
+    // Update the 'verified' field in the database for the given postId
+    // You can use your preferred method or database library to perform the update
+
+    // Example using Mongoose:
     await Collection2.findByIdAndUpdate(postId, { verified: true });
-    res.redirect("/admin");
+
+    // Remove the verified post from the verification posts array
+    const verificationPostIndex = verificationPosts.findIndex(p => p.id === postId);
+    if (verificationPostIndex !== -1) {
+      const verifiedPost = verificationPosts.splice(verificationPostIndex, 1)[0];
+      
+      // Add the verified post to the verified posts array
+      verifiedPosts.push(verifiedPost);
+    }
+
+    // Redirect to the index page
+    res.redirect('/index');
   } catch (error) {
-    console.log(error);
-    res.send("Error verifying post");
+    console.error(error);
+    res.status(500).send('Error occurred during verification');
   }
 });
+
+
+
 
 
 app.post("/index", async (req, res) => {
@@ -106,6 +129,7 @@ app.post("/index", async (req, res) => {
     };
 
     await Collection2.create(postData);
+
     res.redirect("/index");
   } catch (error) {
     console.log(error);
@@ -127,19 +151,20 @@ app.post("/submit-announcement", async (req, res) => {
     res.status(500).send("Error submitting announcement");
   }
 });
-app.get("/profile", async (req, res) => {
+
+app.get('/profile', async (req, res) => {
   const category = req.session.category;
   const name = req.session.name;
 
   let profileView;
-  if (category === "Volunteer") {
-    profileView = "volunteer";
-  } else if (category === "Admin") {
-    profileView = "admin";
-  } else if (category === "Co-ordinator") {
-    profileView = "coordinator";
+  if (category === 'Volunteer') {
+    profileView = 'volunteer';
+  } else if (category === 'Admin') {
+    profileView = 'admin';
+  } else if (category === 'Co-ordinator') {
+    profileView = 'coordinator';
   } else {
-    return res.send("Invalid category");
+    return res.send('Invalid category');
   }
 
   try {
@@ -149,9 +174,13 @@ app.get("/profile", async (req, res) => {
       const programs = user.programs;
       const { phone_number, dob, address } = user;
 
+      const verificationPosts = []; // Retrieve verification posts
+      const verifiedPosts = await Collection2.find({ verified: true })
+        .sort({ _id: -1 })
+        .populate('volunteer', 'name');
       const posts = await Collection2.find()
         .sort({ _id: -1 })
-        .populate("volunteer", "name");
+        .populate('volunteer', 'name');
 
       const announcements = await Collection3.find().sort({ _id: -1 });
       const activities = await Collection4.find().sort({ _id: -1 });
@@ -161,35 +190,41 @@ app.get("/profile", async (req, res) => {
         userName: user.name,
         category,
         programs,
+        verificationPosts,
+        verifiedPosts,
         posts,
         announcements,
-        activities,
         name: user.name,
         dob,
         address,
         phone_number,
       });
     } else {
-      return res.send("User not found");
+      return res.send('User not found');
     }
   } catch (error) {
     console.log(error);
-    return res.send("Error retrieving user information");
+    return res.send('Error retrieving user information');
   }
 });
 
-app.get("/index", async (req, res) => {
+
+app.get('/index', async (req, res) => {
   try {
-    const announcements = await Collection3.find().sort({ _id: -1 });
-    const posts = await Collection2.find()
+    const verifiedPosts = await Collection2.find({ verified: true })
       .sort({ _id: -1 })
-      .populate("volunteer", "name");
-    res.render("index", { announcements, posts });
+      .populate('volunteer', 'name');
+
+    const announcements = await Collection3.find().sort({ _id: -1 });
+
+    res.render('index', { verifiedPosts, announcements });
   } catch (error) {
     console.log(error);
-    res.send("Error retrieving announcements");
+    res.status(500).send('Error retrieving data');
   }
 });
+
+
 app.post("/activity-update", async (req, res) => {
   const volunteerId = req.session.userId; // Assuming you have a userId stored in the session
   const volunteerName = req.session.name;

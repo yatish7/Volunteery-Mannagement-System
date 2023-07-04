@@ -176,6 +176,9 @@
           margin-left: auto;
         }
     </style>
+    <!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
     <div class="navbar">
@@ -219,19 +222,44 @@
     </div>
  <div class="verification">
   {{#each posts}}
-  <div class="post">
-    <div class="post-content">
-      <p>Volunteer name: {{this.volunteerName}}</p> 
-      <h3>{{this.title}}</h3>
-      <p>{{this.description}}</p>
+    <div class="post" id="verification-post-{{this._id}}">
+      <div class="post-content">
+        <p>Volunteer name: {{this.volunteerName}}</p> 
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+      </div>
+      <form id="verify-form-{{this._id}}" action="/verify/{{this._id}}" method="POST">
+        <button class="verify-button" type="submit">Verify</button>
+      </form>
     </div>
-    <form action="/verify" method="POST">
-      <input type="hidden" name="postId" value="{{this._id}}">
-      <button class="verify-button" type="submit">Verify</button>
-    </form>
-  </div>
   {{/each}}
 </div>
+
+<!-- Include your custom JavaScript file -->
+<script src="../backend/script.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.verify-button').on('click', function() {
+      var postId = $(this).data('post-id');
+      var verificationPostId = '#verification-post-' + postId;
+
+      // Remove the verified post from the verification box
+      $(verificationPostId).remove();
+
+      // Reload the page to update the post section
+      location.reload();
+    });
+  });
+
+  $(document).ready(function() {
+    $('#clear-button').on('click', function() {
+      // Redirect to the clear route
+      window.location.href = '/clear';
+    });
+  });
+</script>
+
+
 
 </body>
 </html>
