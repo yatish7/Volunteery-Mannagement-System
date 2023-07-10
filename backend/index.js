@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const hbs = require("hbs");
-const { Collection1, Collection2, Collection3, Collection4 } = require("./mongodb");
+const { Collection1, Collection2, Collection3, Collection4,Collection5 } = require("./mongodb");
 const app = express();
 const viewPath = path.join(__dirname, "../views");
 app.set("views", viewPath);
@@ -85,20 +85,26 @@ app.post('/verify/:id', async (req, res) => {
   try {
     const postId = req.params.id;
 
-    // Update the 'verified' field in the database for the given postId
-    // You can use your preferred method or database library to perform the update
-
-    // Example using Mongoose:
-    await Collection2.findByIdAndUpdate(postId, { verified: true });
-
-    // Remove the verified post from the verification posts array
-    const verificationPostIndex = verificationPosts.findIndex(p => p.id === postId);
-    if (verificationPostIndex !== -1) {
-      const verifiedPost = verificationPosts.splice(verificationPostIndex, 1)[0];
-      
-      // Add the verified post to the verified posts array
-      verifiedPosts.push(verifiedPost);
+    // Find the post in Collection2
+    const post = await Collection2.findById(postId);
+    if (!post) {
+      return res.status(404).send('Post not found');
     }
+
+    // Create a new document in Collection5 using the data from the post in Collection2
+    const verifiedPost = new Collection5({
+      title: post.title,
+      description: post.description,
+      volunteer: post.volunteer,
+      volunteerName: post.volunteerName,
+      verified: true, // Set the verified flag to true
+    });
+
+    // Save the verified post in Collection5
+    await verifiedPost.save();
+
+    // Remove the post from Collection2
+    await Collection2.findByIdAndRemove(postId);
 
     // Redirect to the index page
     res.redirect('/index');
@@ -110,6 +116,20 @@ app.post('/verify/:id', async (req, res) => {
 
 
 
+app.post('/unverify/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+
+    // Remove the unverified post from Collection2
+    await Collection2.findByIdAndRemove(postId);
+
+    // Redirect to the index page
+    res.redirect('/index');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error occurred during unverification');
+  }
+});
 
 
 app.post("/index", async (req, res) => {
@@ -211,7 +231,7 @@ app.get('/profile', async (req, res) => {
 
 app.get('/index', async (req, res) => {
   try {
-    const verifiedPosts = await Collection2.find({ verified: true })
+    const verifiedPosts = await Collection5.find({ verified: true })
       .sort({ _id: -1 })
       .populate('volunteer', 'name');
 
@@ -219,10 +239,11 @@ app.get('/index', async (req, res) => {
 
     res.render('index', { verifiedPosts, announcements });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send('Error retrieving data');
   }
 });
+
 
 
 app.post("/activity-update", async (req, res) => {
