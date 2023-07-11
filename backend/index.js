@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const hbs = require("hbs");
-const { Collection1, Collection2, Collection3, Collection4,Collection5 } = require("./mongodb");
+const { Collection1, Collection2, Collection3, Collection4,Collection5,Collection6 } = require("./mongodb");
 const app = express();
 const viewPath = path.join(__dirname, "../views");
 app.set("views", viewPath);

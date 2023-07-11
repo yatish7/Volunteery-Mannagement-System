@@ -143,4 +143,38 @@ const verifiedPostSchema = new mongoose.Schema({
 });
 const Collection5=mongoose.model("Collection5",verifiedPostSchema)
 
-module.exports = { Collection1, Collection2, Collection3, Collection4,Collection5 };
+const activityVerifiedSchema = new mongoose.Schema({
+  program: {
+    type: String,
+    required: true,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+  hours: {
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  volunteer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Collection1",
+    required: true,
+  },
+  volunteerName: {
+    type: String,
+    required: true,
+  },
+});
+
+const Collection6 = mongoose.model("Collection6", activityVerifiedSchema);
+
+module.exports = { Collection1, Collection2, Collection3, Collection4,Collection5,Collection6 };
