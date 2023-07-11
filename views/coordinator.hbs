@@ -217,8 +217,29 @@
             <button type="submit">Submit</button>
         </form>
     </div>
- <div class="verification">
+<div class="verification">
+  {{#each posts}}
+    <div class="post" id="verification-post-{{this._id}}">
+      <div class="post-content">
+        <p>Volunteer name: {{this.volunteerName}}</p>
+        <h3>{{this.program}}</h3>
+        <p>{{this.description}}</p>
+        <p>Start Date: {{this.startDate}}</p>
+        <p>End Date: {{this.endDate}}</p>
+        <p>Hours: {{this.hours}}</p>
+      </div>
+      <div class="post-buttons">
+        <form id="verify-form-{{this._id}}" action="/verify/{{this._id}}" method="POST">
+          <button class="verify-button" type="submit">Verified</button>
+        </form>
+        <form id="unverify-form-{{this._id}}" action="/unverify/{{this._id}}" method="POST">
+          <button class="unverify-button" type="submit">Unverified</button>
+        </form>
+      </div>
+    </div>
+  {{/each}}
 </div>
+
 
 </body>
 </html>
