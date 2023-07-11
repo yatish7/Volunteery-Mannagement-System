@@ -13,9 +13,15 @@
     "express": "^4.18.2",
     "express-handlebars": "^4.0.4",
     "express-session": "^1.17.3",
+    "gulp-header": "^2.0.9",
     "handlebars-helpers": "^0.10.0",
     "hbs": "^4.2.0",
+    "highlight.js": "^11.8.0",
     "mongoose": "^7.1.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "resolve-url": "^0.2.1",
+    "source-map-resolve": "^0.6.0",
+    "source-map-url": "^0.4.1",
+    "urix": "^0.1.0"
   }
 }
