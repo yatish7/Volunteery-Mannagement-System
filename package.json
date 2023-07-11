@@ -4,7 +4,8 @@
   "description": "My First full Stack Project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon backend/index.js"
+    "dev": "nodemon backend/index.js",
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=14.20.1"
