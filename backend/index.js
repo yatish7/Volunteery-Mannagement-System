@@ -1,5 +1,5 @@
 const express = require("express");
-require('dotenv').config();
+const dotenv = require('dotenv');
 const session = require("express-session");
 const mongoose = require('mongoose');
 const path = require("path");
@@ -13,6 +13,11 @@ mongoose.set('strictQuery', false);
 app.use(express.json());
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: false }));
+
+// Load environment variables from .env file
+dotenv.config();
+console.log('MONGO_URI:', process.env.MONGO_URI);
+
 app.use(
   session({
     secret: "your-secret-key",
@@ -25,12 +30,16 @@ const store = new MongoDBStore({
   collection: "collection6", // Name of the collection to store sessions
 });
 
+// Rest of your code...
+
+// Connect to MongoDB
 const connectDB = async () => {
   try {
     console.log("Attempting to connect to the database...");
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      createIndexes: true, // Use createIndexes option instead of useCreateIndex
     });
     console.log("Connected successfully to the database");
   } catch (error) {
@@ -39,12 +48,7 @@ const connectDB = async () => {
   }
 };
 
-connectDB().then(() => {
-  // Start the server
-  app.listen(3000, () => {
-    console.log("Server is up on port 3000");
-  });
-});
+// Rest of your code...
 
 // Rest of the code...
 
