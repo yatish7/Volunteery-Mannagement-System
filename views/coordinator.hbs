@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Coordinator's Profile</title>
     <style>
         body {
             margin: 0;
@@ -142,6 +142,16 @@
             text-align: center;
             margin-top: 20px;
         }
+          .post-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+            .verify-button,
+            .unverify-button {
+            flex: 0 0 48%;
+            }
 
         .profile-photo {
             width: 150px;
@@ -176,6 +186,9 @@
           margin-left: auto;
         }
     </style>
+    <!-- Include jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
     <div class="navbar">
@@ -183,7 +196,6 @@
             <li><a href="/logout">Logout</a></li>
         </ul>
     </div>
-    <h2 class="verification-heading">Verification Pending Posts</h2>
     <div class="container">
         <div class="box profile-box">
             <div class="profile-container">
@@ -218,28 +230,61 @@
         </form>
     </div>
 <div class="verification">
-  {{#each posts}}
-    <div class="post" id="verification-post-{{this._id}}">
-      <div class="post-content">
-        <p>Volunteer name: {{this.volunteerName}}</p>
-        <h3>{{this.program}}</h3>
-        <p>{{this.description}}</p>
-        <p>Start Date: {{this.startDate}}</p>
-        <p>End Date: {{this.endDate}}</p>
-        <p>Hours: {{this.hours}}</p>
+    <div class="verification-box">
+      {{#each posts}}
+      <div class="post" id="verification-post-{{this._id}}">
+        <!-- Post content goes here -->
+        <div class="post-buttons">
+          <form id="verify-form-{{this._id}}" action="/verify/{{this._id}}" method="POST">
+            <button class="verify-button" type="submit" data-post-id="{{this._id}}">Verify</button>
+          </form>
+          <form id="unverify-form-{{this._id}}" action="/unverify/{{this._id}}" method="POST">
+            <button class="unverify-button" type="submit" data-post-id="{{this._id}}">Unverify</button>
+          </form>
+        </div>
       </div>
-      <div class="post-buttons">
-        <form id="verify-form-{{this._id}}" action="/verify/{{this._id}}" method="POST">
-          <button class="verify-button" type="submit">Verified</button>
-        </form>
-        <form id="unverify-form-{{this._id}}" action="/unverify/{{this._id}}" method="POST">
-          <button class="unverify-button" type="submit">Unverified</button>
-        </form>
-      </div>
+      {{/each}}
     </div>
-  {{/each}}
-</div>
+  </div>
 
+
+<!-- ... (existing code) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.verify-button').on('click', function(e) {
+      e.preventDefault();
+      var postId = $(this).data('post-id');
+
+      // Send an AJAX request to verify the post
+      $.post(`/verify/${postId}`)
+        .done(function() {
+          // Remove the verified post from the verification box
+          $(`#verification-post-${postId}`).remove();
+        })
+        .fail(function(err) {
+          console.error(err);
+          alert('Error occurred during verification');
+        });
+    });
+
+    $('.unverify-button').on('click', function(e) {
+      e.preventDefault();
+      var postId = $(this).data('post-id');
+
+      // Send an AJAX request to unverify the post
+      $.post(`/unverify/${postId}`)
+        .done(function() {
+          // Remove the unverified post from the verification box
+          $(`#verification-post-${postId}`).remove();
+        })
+        .fail(function(err) {
+          console.error(err);
+          alert('Error occurred during unverification');
+        });
+    });
+  });
+</script>
 
 </body>
 </html>

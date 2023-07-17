@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Volunteer's Profile</title>
     <style>
         body {
             margin: 0;
@@ -196,45 +196,48 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Activity Update</h2>
-        <form id="upload-work-form" action="/activity-update" method="post">
-            <div>
-                <label for="program">Program:</label>
-                <select id="program" name="program">
-                    {{#each programs}}
-                    <option value="{{this}}">{{this}}</option>
-                    {{/each}}
-                </select>
-            </div>
-            <br><br>
+<form id="upload-work-form" action="/upload-work" method="post">
+  <div>
+    <label for="program">Program:</label>
+    <select id="program" name="program">
+      {{#each programs}}
+      <option value="{{this}}">{{this}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <br />
 
-            <div>
-                <label for="start-date">Start Date:</label>
-                <input type="date" id="start-date" name="start-date">
-                <br><br>
-            </div>
+  <div>
+    <label for="start-date">Start Date:</label>
+    <input type="date" id="start-date" name="start-date" required />
+    <br /><br />
+  </div>
 
-            <div>
-                <label for="end-date">End Date:</label>
-                <input type="date" id="end-date" name="end-date">
-                <br><br>
-            </div>
+  <div>
+    <label for="end-date">End Date:</label>
+    <input type="date" id="end-date" name="end-date" required />
+    <br /><br />
+  </div>
 
-            <div>
-                <label for="hours">No of Hours:</label>
-                <input type="number" id="hours" name="hours">
-                <br><br>
-            </div>
+  <div>
+    <label for="hours">No of Hours:</label>
+    <input type="number" id="hours" name="hours" required />
+    <br /><br />
+  </div>
 
-            <div>
-                <label for="description">Description:</label>
-                <textarea id="description" name="description"></textarea>
-                <br><br>
-            </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+    <br /><br />
+  </div>
 
-            <div>
-                <input type="submit" value="Upload">
-            </div>
-        </form>
+  <div>
+    <input type="submit" value="Upload">
+  </div>
+</form>
+
+<!-- ... (your existing code) -->
+
     </div>
 </div>
 

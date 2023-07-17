@@ -55,8 +55,8 @@ app.post("/signup", async (req, res) => {
 
   try {
     const result = await Collection1.insertMany([data]);
-    const volunteerId = result[0]._id; // Get the volunteerId from the inserted document
-    req.session.volunteerId = volunteerId; // Set the volunteerId in the session
+    const volunteerId = result[0]._id; 
+    req.session.volunteerId = volunteerId;
     res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -68,7 +68,7 @@ app.post("/login", async (req, res) => {
   try {
     const verify = await Collection1.findOne({ email: req.body.email });
     if (verify && verify.password === req.body.password) {
-      req.session.userId = verify._id; // Set the userId in the session
+      req.session.userId = verify._id;
       req.session.name = verify.name;
       req.session.category = verify.category;
       res.redirect("/index");
@@ -227,17 +227,21 @@ app.get('/profile', async (req, res) => {
     return res.send('Error retrieving user information');
   }
 });
-
-
 app.get('/index', async (req, res) => {
   try {
     const verifiedPosts = await Collection5.find({ verified: true })
-      .sort({ _id: -1 })
-      .populate('volunteer', 'name');
+    .sort({ _id: -1 })
+    .populate('volunteer', 'name');
 
-    const announcements = await Collection3.find().sort({ _id: -1 });
+  const announcements = await Collection3.find().sort({ _id: -1 });
 
-    res.render('index', { verifiedPosts, announcements });
+    // Fetch the count of documents from Collection1 where the category is "Volunteer"
+    const volunteerCount = await Collection1.countDocuments({ category: 'Volunteer' });
+    const coordinatorCount = await Collection1.countDocuments({ category: 'Co-ordinator' });
+    const adminCount = await Collection1.countDocuments({ category: 'Admin' });
+
+    // Rest of the code...
+    res.render('index', { verifiedPosts, announcements, volunteerCount, coordinatorCount, adminCount });
   } catch (error) {
     console.error(error);
     res.status(500).send('Error retrieving data');

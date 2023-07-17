@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
 
 mongoose
-  .connect("mongodb://localhost:27017/vmsDB")
+  .connect("mongodb+srv://YATISH:yatish180104@vmsdb.ds1cgci.mongodb.net/?retryWrites=true&w=majority")
   .then(() => {
     console.log("Connected successfully to database");
   })
-  .catch(() => {
-    console.log("Failed to connect to database");
+  .catch((error) => {
+    console.log("Error connecting to MongoDB:", error.message);
   });
+
+
+
 
 const signUpSchema = new mongoose.Schema({
   name: {
