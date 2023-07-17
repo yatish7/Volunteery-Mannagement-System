@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const path = require("path");
 const hbs = require("hbs");
+const MongoDBStore = require("connect-mongodb-session")(session);
 const { Collection1, Collection2, Collection3, Collection4,Collection5,Collection6 } = require("./mongodb");
 const app = express();
 const viewPath = path.join(__dirname, "../views");
@@ -17,6 +18,27 @@ app.use(
     saveUninitialized: false,
   })
 );
+const store = new MongoDBStore({
+  uri: "mongodb+srv://YATISH:yatish180104@vmsdb.ds1cgci.mongodb.net/?retryWrites=true&w=majority", // Replace with your MongoDB connection string
+  collection: "collection6", // Name of the collection to store sessions
+});
+
+// Catch errors for the MongoDBStore
+store.on("error", function (error) {
+  console.error("Session store error:", error);
+});
+
+// ... (other configurations)
+
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    store: store, // Use MongoDBStore as the session store
+  })
+);
+
 
 const Handlebars = require("hbs");
 const handlebarsHelpers = require("handlebars-helpers")();
