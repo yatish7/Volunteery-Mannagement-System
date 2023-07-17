@@ -1,14 +1,24 @@
-const mongoose = require("mongoose");
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
-mongoose
-  .connect("mongodb+srv://YATISH:yatish180104@vmsdb.ds1cgci.mongodb.net/?retryWrites=true&w=majority")
-  .then(() => {
-    console.log("Connected successfully to database");
-  })
-  .catch((error) => {
+// Load environment variables from .env file
+dotenv.config();
+console.log('MONGO_URI:', process.env.MONGO_URI);
+
+const connectDB = async () => {
+  try {
+    console.log("Attempting to connect to the database...");
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      createIndexes: true, // Use createIndexes option instead of useCreateIndex
+    });
+    console.log("Connected successfully to the database");
+  } catch (error) {
     console.log("Error connecting to MongoDB:", error.message);
-  });
-
+    process.exit(1);
+  }
+};
 
 
 

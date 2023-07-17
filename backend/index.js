@@ -1,13 +1,15 @@
 const express = require("express");
+require('dotenv').config();
 const session = require("express-session");
+const mongoose = require('mongoose');
 const path = require("path");
 const hbs = require("hbs");
 const MongoDBStore = require("connect-mongodb-session")(session);
-const { Collection1, Collection2, Collection3, Collection4,Collection5,Collection6 } = require("./mongodb");
+const { Collection1, Collection2, Collection3, Collection4, Collection5, Collection6 } = require("./mongodb");
 const app = express();
 const viewPath = path.join(__dirname, "../views");
 app.set("views", viewPath);
-
+mongoose.set('strictQuery', false);
 app.use(express.json());
 app.set("view engine", "hbs");
 app.use(express.urlencoded({ extended: false }));
@@ -19,25 +21,32 @@ app.use(
   })
 );
 const store = new MongoDBStore({
-  uri: "mongodb+srv://YATISH:yatish180104@vmsdb.ds1cgci.mongodb.net/?retryWrites=true&w=majority", // Replace with your MongoDB connection string
+  uri: process.env.MONGO_URI, // Use the MONGO_URI from .env
   collection: "collection6", // Name of the collection to store sessions
 });
 
-// Catch errors for the MongoDBStore
-store.on("error", function (error) {
-  console.error("Session store error:", error);
+const connectDB = async () => {
+  try {
+    console.log("Attempting to connect to the database...");
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected successfully to the database");
+  } catch (error) {
+    console.log("Error connecting to MongoDB:", error.message);
+    process.exit(1);
+  }
+};
+
+connectDB().then(() => {
+  // Start the server
+  app.listen(3000, () => {
+    console.log("Server is up on port 3000");
+  });
 });
 
-// ... (other configurations)
-
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: false,
-    store: store, // Use MongoDBStore as the session store
-  })
-);
+// Rest of the code...
 
 
 const Handlebars = require("hbs");
@@ -299,7 +308,3 @@ app.post("/activity-update", async (req, res) => {
 });
 
 app.use(express.static(path.join(__dirname, "../public")));
-
-app.listen(3000, () => {
-  console.log("Server is up on port 3000");
-});
