@@ -18,20 +18,6 @@ app.use(express.urlencoded({ extended: false }));
 dotenv.config();
 console.log('MONGO_URI:', process.env.MONGO_URI);
 
-app.use(
-  session({
-    secret: "your-secret-key",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-const store = new MongoDBStore({
-  uri: process.env.MONGO_URI, // Use the MONGO_URI from .env
-  collection: "collection6", // Name of the collection to store sessions
-});
-
-// Rest of your code...
-
 // Connect to MongoDB
 const connectDB = async () => {
   try {
@@ -48,19 +34,50 @@ const connectDB = async () => {
   }
 };
 
+// Assuming you have a list of verification posts and verified posts stored in variables
+var verificationPosts = [];
+var verifiedPosts = [];
+var posts = [];
+
+// Create the MongoDBStore
+const store = new MongoDBStore({
+  uri: process.env.MONGO_URI, // Use the MONGO_URI from .env
+  collection: "collection6", // Name of the collection to store sessions
+});
+
+// Use the MongoDBStore for session management
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
+
 // Rest of your code...
-
-// Rest of the code...
-
 
 const Handlebars = require("hbs");
 const handlebarsHelpers = require("handlebars-helpers")();
 Handlebars.registerHelper(handlebarsHelpers);
 
-// Assuming you have a list of verification posts and verified posts stored in variables
-var verificationPosts = [];
-var verifiedPosts = [];
-var posts = [];
+// Rest of the code...
+
+// Your routes and middleware go here...
+// ...
+
+// Start the server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+// Connect to MongoDB
+connectDB().catch((err) => {
+  console.log("Error connecting to MongoDB:", err.message);
+  process.exit(1);
+});
+
 
 app.get("/", (req, res) => {
   res.render("login");
