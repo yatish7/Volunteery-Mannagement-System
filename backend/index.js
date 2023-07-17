@@ -25,7 +25,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      createIndexes: true, // Use createIndexes option instead of useCreateIndex
+      useCreateIndex: true, // Use useCreateIndex option instead of createIndexes
     });
     console.log("Connected successfully to the database");
   } catch (error) {
@@ -33,6 +33,7 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
+
 
 // Assuming you have a list of verification posts and verified posts stored in variables
 var verificationPosts = [];
