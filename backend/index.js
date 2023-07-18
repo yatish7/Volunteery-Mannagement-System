@@ -115,6 +115,34 @@ app.post("/signup", async (req, res) => {
     res.send("Error signing up");
   }
 });
+app.post("/upload-work", async (req, res) => {
+  try {
+    const volunteerId = req.session.userId; // Assuming you have a userId stored in the session
+    const volunteerName = req.session.name;
+
+    if (!volunteerId || !volunteerName) {
+      throw new Error("Volunteer information is missing");
+    }
+
+    const activityUpdateData = {
+      program: req.body.program,
+      startDate: new Date(req.body["start-date"]),
+      endDate: new Date(req.body["end-date"]),
+      hours: parseInt(req.body.hours),
+      description: req.body.description,
+      volunteer: volunteerId,
+      volunteerName: volunteerName,
+    };
+
+    await Collection4.create(activityUpdateData);
+
+    res.redirect("/profile");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error uploading work");
+  }
+});
+
 
 app.post("/login", async (req, res) => {
   try {
