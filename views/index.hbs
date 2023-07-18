@@ -237,7 +237,7 @@
         labels: ['Admins', 'Coordinators', 'Volunteers'],
         datasets: [
           {
-            label: 'Number of Volunteers, Coordinators, and Admins',
+            label: 'Number: ',
             data: [{{adminCount}}, {{coordinatorCount}}, {{volunteerCount}}],
             backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
             borderWidth: 1,
@@ -280,10 +280,10 @@
   function generatePieChart() {
     // Sample data for demonstration, replace this with data from your server
     const programData = {
-      BloodDonar: 50,
-      HareKrishna: 30,
-      GenderEquality: 20,
-      BrightSpark: 40,
+      BloodDonar: 3,
+      HareKrishna: 4,
+      GenderEquality: 2,
+      BrightSpark: 5,
     };
 
     const programNames = Object.keys(programData);
